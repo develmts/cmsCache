@@ -1,40 +1,38 @@
 # cms-cache
 
-Agnostic in-memory cache layer for any CMS provider.
+**Agnostic in-memory caching layer for any CMS provider**
 
-## Install
+`cms-cache` is a lightweight, fully agnostic library providing an in-memory caching layer in front of any content source or CMS. It makes no assumptions about schemas, formats, or data structures — you decide the cache keys, refresh rules, and the provider that supplies the content.
 
-```bash
-npm install cms-cache
-# or
-pnpm add cms-cache
-# or
-yarn add cms-cache
-```
+It is ideal when your CMS or content backend is:
+- slow,
+- rate-limited,
+- expensive to query,
+- remote or unstable,
+- or simply receives repeated requests for the same resources.
 
-## Quick example
+---
 
-```ts
-import {
-  InMemoryCache,
-  withCache,
-  createDictProvider
-} from 'cms-cache';
+## ✨ Features
 
-const dict = {
-  'page:home': { title: 'Home', body: '...' }
-};
+- **No opinions about your CMS or data**  
+  Cache objects exactly as they are — no transformations, no schema constraints.
 
-const rawProvider = createDictProvider(dict);
-const cache = new InMemoryCache({ defaultTtlMs: 60_000 });
+- **Transparent caching around any provider**  
+  Wrap any content provider with `withCache()` without changing its interface.
 
-const provider = withCache(rawProvider, cache, {
-  keyBuilder: (req) => `cms:${req.resource}:${req.id ?? ''}`,
-  ttlMs: 60_000
-});
+- **In-memory implementation with zero dependencies**  
+  Perfect for SSR, microservices, edge runtimes, and local development.
 
-const page = await provider.fetch({
-  resource: 'page',
-  id: 'home'
-});
-```
+- **Flexible TTL and invalidation**  
+  Expire entries automatically or clear them conditionally.
+
+- **Fully customizable cache keys**  
+  You define how resources are identified and grouped.
+
+---
+
+## 📁 Additional Documentation
+
+- **EXAMPLE.md** — A complete example showing how to cache remote JSON resources.  
+- **HOWTO.md** — Installation, quickstart, provider patterns, TTL strategies, and key builder examples.
